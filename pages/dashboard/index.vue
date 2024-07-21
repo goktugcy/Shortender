@@ -35,11 +35,11 @@
       v-for="item in data"
       :key="item.id"
     >
-      <LinkItem :link="{ id: item.id, key: item.key, url: item.url }" />
+      <LinkItem :link="{ id: item.id, key: item.key, url: item.url ?? '' }" />
     </section>
 
     <div class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2">
-      <Transition duration="600" name="notification">
+      <Transition :duration="{ enter: 600, leave: 600 }" name="notification">
         <div class="card text-lg w-fit ml-auto" v-if="isShowNotification">
           Error: fill url first!
         </div>
@@ -49,7 +49,6 @@
 </template>
 
 <script lang="ts" setup>
-import { nanoid } from "nanoid";
 import { Database } from "types/supabase";
 
 const client = useSupabaseClient<Database>();
@@ -101,7 +100,7 @@ const handleForm = async () => {
 };
 
 const createShortKey = (len: number = 6): void => {
-  form.value.key = nanoid(len);
+  form.value.key = Math.random().toString(36).substr(2, len);
 };
 
 const showNotification = () => {
