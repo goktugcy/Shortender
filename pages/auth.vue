@@ -2,8 +2,22 @@
   <div class="h-screen grid place-content-center relative">
     <div class="container">
       <div class="card">
-        <div class="flex mx-auto justify-center items-center w-20 h-20 rounded-full border border-white/30 shadow-xl">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        <div
+          class="flex mx-auto justify-center items-center w-20 h-20 rounded-full border border-white/30 shadow-xl"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8"
+          >
+            <path
+              stroke-linecap="round"
+              d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+            />
+          </svg>
         </div>
         <button
           class="py-2 text-2xl w-full px-6 rounded-full mt-6 btn"
@@ -66,7 +80,9 @@
         </div>
       </div>
     </div>
-    <div class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2">
+    <div
+      class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2"
+    >
       <Transition :duration="{ enter: 600, leave: 600 }" name="notification">
         <div class="card text-lg w-fit ml-auto" v-if="isShowNotification">
           A confirmation email has been sent to your email
@@ -87,13 +103,14 @@ let isShowNotification = ref<boolean>(false);
 let errorMessage = ref<string>("");
 let authMethodLogin = ref<boolean>(true);
 const formData = ref({ email: "", password: "" });
-const re: RegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const re: RegExp =
+  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const loginWithGitHub = async () => {
   try {
     const { error } = await supabaseAuth.auth.signInWithOAuth({
       provider: "github",
-      options: { redirectTo: "http://localhost:3000" },
+      options: { redirectTo: import.meta.env.APP_URL },
     });
 
     if (error) errorMessage.value = error.message;
@@ -140,7 +157,7 @@ const signUp = async () => {
     const { data, error } = await supabaseAuth.auth.signUp({
       ...formData.value,
       options: {
-        emailRedirectTo: "https://short-link-delta.vercel.app/dashboard",
+        emailRedirectTo: import.meta.env.APP_URL,
       },
     });
 
