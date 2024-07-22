@@ -6,20 +6,25 @@ export default async function useExternalRedirect(
   linkId: number,
   code: number = 302
 ): Promise<void> {
-  if (!/^(http?:\/\/)/.test(url)) {
-    const nuxtApp = useNuxtApp();
+  const validUrlRegex = /^(https?:\/\/)/;
+  if (!validUrlRegex.test(url)) {
+    throw new Error("Invalid URL");
+  }
 
-    // Ensure that we have the SSR context
-    if (process.server && nuxtApp.ssrContext?.event) {
-      const { event } = nuxtApp.ssrContext;
+  const nuxtApp = useNuxtApp();
 
-      const headers = event.node.req.headers;
-      const userAgent = headers["user-agent"] || null;
-      const ip = (headers["x-real-ip"] || headers["x-forwarded-for"]) as
-        | string
-        | null;
+  // Ensure that we have the SSR context
+  if (process.server && nuxtApp.ssrContext?.event) {
+    const { event } = nuxtApp.ssrContext;
 
-      // Dynamically import geoip-lite only on the server side
+    const headers = event.node.req.headers;
+    const userAgent = headers["user-agent"] || null;
+    const ip = (headers["x-real-ip"] || headers["x-forwarded-for"]) as
+      | string
+      | null;
+
+    // Dynamically import geoip-lite only on the server side
+    try {
       const geoip = await import("geoip-lite").then(
         (mod) => mod.default || mod
       );
@@ -50,11 +55,12 @@ export default async function useExternalRedirect(
       return nuxtApp.callHook("app:redirected").then(() => {
         return sendRedirect(event, url, code);
       });
-    } else if (process.client) {
-      // Client-side redirect
-      window.location.href = url;
+    } catch (err) {
+      console.error("Error during geoip lookup or Supabase interaction:", err);
+      throw new Error("Server error during redirection process");
     }
-  } else {
-    throw new Error("Invalid URL");
+  } else if (process.client) {
+    // Client-side redirect
+    window.location.href = url;
   }
 }
