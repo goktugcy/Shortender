@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Database } from "~/types/supabase";
+import { type Database } from "~/types/supabase";
 
 const client = useSupabaseClient<Database>();
 // const user = useSupabaseUser();
@@ -11,10 +11,7 @@ const client = useSupabaseClient<Database>();
 const params = useRoute().params;
 
 if (!params.id) {
-  throw createError({
-    statusCode: 404,
-    message: "Not Fount",
-  });
+  throw createError("Not Found");
 }
 
 const { data } = await useAsyncData("links", async () => {
@@ -25,16 +22,13 @@ const { data } = await useAsyncData("links", async () => {
     .single();
 
   if (error) {
-    throw createError({
-      statusCode: 404,
-      message: "Not Fount",
-    });
+    throw createError("Not Found");
   }
 
   return data;
 });
 if (data.value?.url) {
-  useExternalRedirect(data.value?.url);
+  useExternalRedirect(data.value?.url, 301);
 }
 </script>
 

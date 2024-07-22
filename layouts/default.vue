@@ -7,8 +7,4 @@
 
 <script setup></script>
 
-<style scoped>
-main {
-
-}
-</style>
+<style scoped></style>

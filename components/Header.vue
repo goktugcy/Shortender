@@ -4,7 +4,11 @@
       <NuxtLink class="text-2xl font-bold hover-effect" :to="{ name: 'index' }"
         >ShortLink
       </NuxtLink>
+
       <ul class="flex gap-5">
+        <label class="flex items-center gap-1">
+          <span>{{ getName() }}</span>
+        </label>
         <li @click="signOut" v-if="isLoggedIn">
           <button class="flex gap-1 hover-effect">
             Sign Out
@@ -37,7 +41,7 @@
 <script lang="ts" setup>
 const supabaseAuth = useSupabaseAuthClient();
 const user = useSupabaseUser();
-
+const getName = () => user.value?.user_metadata.name ?? user.value?.email;
 const route = useRoute();
 const isLoggedIn = ref<boolean>(false);
 

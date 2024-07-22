@@ -41,7 +41,7 @@
             type="submit"
             class="py-2 capitalize rounded-full mt-5 text-2xl px-6 w-full btn"
           >
-            {{ authMethodLogin ? "sign up" : "register" }}
+            {{ authMethodLogin ? "sign in" : "register" }}
           </button>
         </form>
         <div
@@ -67,7 +67,7 @@
       </div>
     </div>
     <div class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2">
-      <Transition duration="600" name="notification">
+      <Transition :duration="{ enter: 600, leave: 600 }" name="notification">
         <div class="card text-lg w-fit ml-auto" v-if="isShowNotification">
           A confirmation email has been sent to your email
         </div>

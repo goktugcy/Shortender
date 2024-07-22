@@ -38,7 +38,9 @@
       <LinkItem :link="{ id: item.id, key: item.key, url: item.url ?? '' }" />
     </section>
 
-    <div class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2">
+    <div
+      class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2"
+    >
       <Transition :duration="{ enter: 600, leave: 600 }" name="notification">
         <div class="card text-lg w-fit ml-auto" v-if="isShowNotification">
           Error: fill url first!
@@ -49,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Database } from "types/supabase";
+import { type Database } from '~/types/supabase';
 
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
@@ -62,11 +64,11 @@ const { data, refresh } = useAsyncData("links", async () => {
   const { data } = await client
     .from("links")
     .select("*")
-    .order("created_at", {ascending: false})
-    .eq("user_id", user.value?.id);
+    .order("created_at", { ascending: false })
+    .eq("user_id", user.value?.id ?? "");
 
   return data;
-})
+});
 
 //--Form--//
 const form = ref({
