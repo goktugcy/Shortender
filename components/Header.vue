@@ -30,7 +30,7 @@
         </li>
         <li v-else>
           <NuxtLink class="py-2 px-3 btn rounded-full" :to="{ name: 'auth' }"
-            >Sign Up
+            >Sign in
           </NuxtLink>
         </li>
       </ul>

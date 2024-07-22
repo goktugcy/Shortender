@@ -38,7 +38,6 @@ export default async function useExternalRedirect(
         ip,
         user_agent: userAgent,
         link_id: linkId,
-        created_at: new Date().toISOString(),
         deleted_at: null,
       });
 

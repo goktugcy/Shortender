@@ -74,7 +74,7 @@
           <template v-else>
             Already have an account?
             <button class="underline" @click="authMethodLogin = true">
-              Sign Up
+              Sign in
             </button>
           </template>
         </div>
