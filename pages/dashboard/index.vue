@@ -30,26 +30,31 @@
       </div>
     </section>
 
-    <section
-      class="container mb-5 last:mb-0"
-    >
-      <LinkItem  />
+    <section class="container mb-5 last:mb-0">
+      <LinkItem />
     </section>
 
     <div
-      class="max-w-[1200px] px-2 w-full absolute top-24 left-1/2 -translate-x-1/2"
+      class="max-w-[1200px] px-6 w-full absolute top-14 left-1/1 -translate-x-1/2"
     >
-      <Transition :duration="{ enter: 600, leave: 600 }" name="notification">
-        <div class="card text-lg w-fit ml-auto" v-if="isShowNotification">
-          Error: fill url first!
+      <TransitionGroup
+        :duration="{ enter: 600, leave: 600 }"
+        name="notification"
+      >
+        <div
+          v-for="notification in notifications"
+          :key="notification.id"
+          class="card text-sm w-fit ml-auto mt-5"
+        >
+          {{ notification.message }}
         </div>
-      </Transition>
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { type Database } from '~/types/supabase';
+import { type Database } from "~/types/supabase";
 
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
@@ -58,7 +63,7 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const { data, refresh } = useAsyncData("links", async () => {
+useAsyncData("links", async () => {
   const { data } = await client
     .from("links")
     .select("*")
@@ -73,14 +78,25 @@ const form = ref({
   url: "",
   key: "",
 });
-let isShowNotification = ref<boolean>(false);
+
+const notifications = ref<{ id: number; message: string }[]>([]);
+
+function addNotification(message: string) {
+  const id = notifications.value.length + 1;
+  notifications.value = [{ id, message }, ...notifications.value];
+  setTimeout(() => {
+    notifications.value = notifications.value.filter(
+      (n: { id: number }) => n.id !== id
+    );
+  }, 3000);
+}
 
 const handleForm = async () => {
   if (!form.value.key) {
     createShortKey();
   }
   if (!form.value.url) {
-    showNotification();
+    addNotification("👎 Error: fill url first");
     return;
   }
   try {
@@ -90,8 +106,7 @@ const handleForm = async () => {
     });
 
     if (error) console.error(error);
-
-    // await refresh();
+    addNotification("👍 Short link created!");
     createShortKey();
     form.value.url = "";
   } catch (err) {
@@ -103,14 +118,24 @@ const createShortKey = (len: number = 6): void => {
   form.value.key = Math.random().toString(36).substr(2, len);
 };
 
-const showNotification = () => {
-  isShowNotification.value = true;
-  setTimeout(() => (isShowNotification.value = false), 3500);
-};
-
 onMounted(() => {
   createShortKey();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.notification-enter-active,
+.notification-leave-active {
+  transition: all 0.5s ease;
+}
+.notification-enter-from,
+.notification-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.notification-enter-to,
+.notification-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

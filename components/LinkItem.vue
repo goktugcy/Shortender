@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="card flex items-center justify-between"
+      class="card flex items-center justify-between m-4"
       v-for="link in links"
       :key="link.id"
     >
@@ -73,6 +73,19 @@
       </button>
     </div>
   </div>
+  <div
+    class="max-w-[1200px] px-2 w-full absolute top-14 left-1/2 -translate-x-1/2"
+  >
+    <TransitionGroup :duration="{ enter: 600, leave: 600 }" name="notification">
+      <div
+        v-for="notification in notifications"
+        :key="notification.id"
+        class="card text-sm w-fit ml-auto mt-5"
+      >
+        {{ notification.message }}
+      </div>
+    </TransitionGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -98,11 +111,10 @@ const fetchLinks = async () => {
   if (error) {
     console.error("Error fetching links:", error);
   } else {
-    // Veriyi Link tipine uygun hale getir
-    links.value = data.map((link: { id: any; key: any; url: any; }) => ({
+    links.value = data.map((link: { id: any; key: any; url: any }) => ({
       id: link.id,
       key: link.key,
-      url: link.url ?? "", // url null ise boş string kullan
+      url: link.url,
     }));
   }
 };
@@ -110,7 +122,7 @@ const fetchLinks = async () => {
 onMounted(() => {
   fetchLinks();
 
-  const subscription = client
+  client
     .channel("custom-all-channel")
     .on(
       "postgres_changes",
@@ -121,21 +133,32 @@ onMounted(() => {
       }
     )
     .subscribe();
-
-
 });
 
 watch(() => user.value?.id, fetchLinks, { immediate: true });
 
+const notifications = ref<{ id: number; message: string }[]>([]);
+
+function addNotification(message: string) {
+  const id = notifications.value.length + 1;
+  notifications.value = [{ id, message }, ...notifications.value];
+  setTimeout(() => {
+    notifications.value = notifications.value.filter(
+      (n: { id: number }) => n.id !== id
+    );
+  }, 3000);
+}
+
 const config = useRuntimeConfig();
 
-const isCopied = ref<boolean>(false); // Doğru TypeScript türü
+const isCopied = ref<boolean>(false);
 
 const copyLink = (key: string) => {
   navigator.clipboard
     .writeText(`${config.public.appUrl}${key}`)
     .then(() => {
       isCopied.value = true;
+      addNotification("Copied ⚡️");
       setTimeout(() => {
         isCopied.value = false;
       }, 3000);
@@ -147,7 +170,8 @@ const deleteLink = async (id: string) => {
   try {
     const { error } = await client.from("links").delete().eq("id", id).single();
     if (error) throw error;
-    fetchLinks(); // Link başarıyla silindikten sonra listeyi yenile
+    addNotification("Link deleted 🗑️");
+    fetchLinks();
   } catch (error) {
     console.error(`Error deleting link with ID ${id}:`, error);
   }
@@ -164,5 +188,20 @@ const deleteLink = async (id: string) => {
 .link-enter-from,
 .link-leave-to {
   opacity: 0;
+}
+
+.notification-enter-active,
+.notification-leave-active {
+  transition: all 0.5s ease;
+}
+.notification-enter-from,
+.notification-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.notification-enter-to,
+.notification-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
