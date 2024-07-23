@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Database } from '~/types/supabase';
+import { type Database } from "~/types/supabase";
 
 interface Link {
   id: string;
@@ -94,16 +94,36 @@ definePageMeta({
 const links = ref<Link[]>([]);
 
 const fetchLinks = async () => {
-  if (!user.value?.id) return; // Kullanıcı ID'si yoksa erken çıkış yap
-  const { data, error } = await client
-    .from("links")
-    .select("*")
-    .eq("user_id", user.value.id);
-  if (error) console.error("Error fetching links:", error);
-  links.value = (data as Link[]) || [];
+  const { data, error } = await client.from("links").select("*");
+  if (error) {
+    console.error("Error fetching links:", error);
+  } else {
+    // Veriyi Link tipine uygun hale getir
+    links.value = data.map((link: { id: any; key: any; url: any; }) => ({
+      id: link.id,
+      key: link.key,
+      url: link.url ?? "", // url null ise boş string kullan
+    }));
+  }
 };
 
-onMounted(fetchLinks);
+onMounted(() => {
+  fetchLinks();
+
+  const subscription = client
+    .channel("custom-all-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "links" },
+      (payload: any) => {
+        console.log("Change received!", payload);
+        fetchLinks();
+      }
+    )
+    .subscribe();
+
+
+});
 
 watch(() => user.value?.id, fetchLinks, { immediate: true });
 

@@ -32,10 +32,8 @@
 
     <section
       class="container mb-5 last:mb-0"
-      v-for="item in data"
-      :key="item.id"
     >
-      <LinkItem :link="{ id: item.id, key: item.key, url: item.url ?? '' }" />
+      <LinkItem  />
     </section>
 
     <div
@@ -93,7 +91,7 @@ const handleForm = async () => {
 
     if (error) console.error(error);
 
-    await refresh();
+    // await refresh();
     createShortKey();
     form.value.url = "";
   } catch (err) {
