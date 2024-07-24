@@ -28,10 +28,10 @@ export default async function useExternalRedirect(
         (mod) => mod.default || mod
       );
 
-      const geo = geoip.lookup(ip || "");
-      const city = geo?.city || null;
-      const country = geo?.country || null;
-
+      // Get the city and country from the IP address
+      const city = geoip.lookup(ip as string)?.city || null;
+      const country = geoip.lookup(ip as string)?.country || null;
+      
       const client = useSupabaseClient<Database>();
 
       // Insert click data into Supabase
