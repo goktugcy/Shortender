@@ -1,7 +1,6 @@
 <template>
   <div>
-    <section class="container pt-24 mb-10">
-      <h1 class="text-3xl font-bold">Dashboard</h1>
+    <section class="container pt-14 mb-10 w-1/2">
       <div class="card mt-10">
         <form @submit.prevent="handleForm">
           <div class="flex justify-between gap-5">
@@ -30,12 +29,12 @@
       </div>
     </section>
 
-    <section class="container mb-5 last:mb-0">
+    <section class="container mb-5 last:mb-0 w-1/2">
       <LinkItem />
     </section>
 
     <div
-      class="max-w-[1200px] px-6 w-full absolute top-14 left-1/1 -translate-x-1/2"
+      class="max-w-[1200px] px-6 w-full absolute top-14 right-1/2 -translate-x-1/3"
     >
       <TransitionGroup
         :duration="{ enter: 600, leave: 600 }"
@@ -123,19 +122,3 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-.notification-enter-active,
-.notification-leave-active {
-  transition: all 0.5s ease;
-}
-.notification-enter-from,
-.notification-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-.notification-enter-to,
-.notification-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>

@@ -13,6 +13,11 @@
           {{ link.url }}
         </div>
       </div>
+      <UToggle
+        on-icon="i-heroicons-check-20-solid"
+        off-icon="i-heroicons-x-mark-20-solid"
+        :model-value="true"
+      />
       <button
         class="btn w-14 h-14 rounded-full grid place-content-center"
         @click="copyLink(link.key)"
@@ -74,7 +79,7 @@
     </div>
   </div>
   <div
-    class="max-w-[1200px] px-2 w-full absolute top-14 left-1/2 -translate-x-1/2"
+    class="max-w-[1200px] px-6 w-full absolute top-14 left-1/2 -translate-x-1/3"
   >
     <TransitionGroup :duration="{ enter: 600, leave: 600 }" name="notification">
       <div
@@ -188,20 +193,5 @@ const deleteLink = async (id: string) => {
 .link-enter-from,
 .link-leave-to {
   opacity: 0;
-}
-
-.notification-enter-active,
-.notification-leave-active {
-  transition: all 0.5s ease;
-}
-.notification-enter-from,
-.notification-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-.notification-enter-to,
-.notification-leave-from {
-  opacity: 1;
-  transform: translateY(0);
 }
 </style>
