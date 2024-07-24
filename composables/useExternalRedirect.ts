@@ -22,32 +22,26 @@ export default async function useExternalRedirect(
     const ip = (headers["x-real-ip"] || headers["x-forwarded-for"]) as
       | string
       | null;
+    const country = headers["cf-ipcountry"] || null;
+    const city = headers["cf-ipcity"] || null;
+
+    const client = useSupabaseClient<Database>();
 
     try {
-      const geoip = await import("geoip-lite").then(
-        (mod) => mod.default || mod
-      );
-
-      // Get the city and country from the IP address
-      const city = geoip.lookup(ip as string)?.city || null;
-      const country = geoip.lookup(ip as string)?.country || null;
-      
-      const client = useSupabaseClient<Database>();
-
       // Insert click data into Supabase
       await client.from("clicks").insert({
-        city: city,
-        country: country,
         ip: ip,
         user_agent: userAgent,
         link_id: linkId,
+        country: country as string,
+        city: city as string,
       });
 
       // Perform the redirect
       await nuxtApp.callHook("app:redirected");
       return sendRedirect(event, url, code);
     } catch (err) {
-      console.error("Error during geoip lookup or Supabase interaction:", err);
+      console.error("Error during Supabase interaction:", err);
       throw new Error("Server error during redirection process");
     }
   } else if (process.client) {
