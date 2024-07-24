@@ -37,6 +37,13 @@ export default async function useExternalRedirect(
         city: city as string,
       });
 
+      await client
+        .from("links")
+        .update({
+          clicks: +1,
+        })
+        .eq("id", linkId);
+
       // Perform the redirect
       await nuxtApp.callHook("app:redirected");
       return sendRedirect(event, url, code);
