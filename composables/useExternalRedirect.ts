@@ -34,18 +34,18 @@ export default async function useExternalRedirect(
 
       const client = useSupabaseClient<Database>();
 
-      // Perform the redirect
-      return nuxtApp.callHook("app:redirected").then(() => {
-        client.from("clicks").insert({
-          city: city,
-          country: country,
-          ip: ip,
-          user_agent: userAgent,
-          link_id: linkId,
-        });
-
-        return sendRedirect(event, url, code);
+      // Insert click data into Supabase
+      await client.from("clicks").insert({
+        city: city,
+        country: country,
+        ip: ip,
+        user_agent: userAgent,
+        link_id: linkId,
       });
+
+      // Perform the redirect
+      await nuxtApp.callHook("app:redirected");
+      return sendRedirect(event, url, code);
     } catch (err) {
       console.error("Error during geoip lookup or Supabase interaction:", err);
       throw new Error("Server error during redirection process");

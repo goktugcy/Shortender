@@ -1,16 +1,17 @@
 <template>
-  {{ data }}
+  <div class="flex justify-center items-center h-screen">
+    <p>Redirecting...</p>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { type Database } from "~/types/supabase";
+import useExternalRedirect from '~/composables/useExternalRedirect'
 
 const client = useSupabaseClient<Database>();
-// const user = useSupabaseUser();
+const route = useRoute();
 
-const params = useRoute().params;
-
-if (!params.id) {
+if (!route.params.id) {
   throw createError("Not Found");
 }
 
@@ -18,7 +19,7 @@ const { data } = await useAsyncData("links", async () => {
   const { data, error } = await client
     .from("links")
     .select("*")
-    .eq("key", params.id)
+    .eq("key", route.params.id)
     .single();
 
   if (error) {
@@ -27,8 +28,9 @@ const { data } = await useAsyncData("links", async () => {
 
   return data;
 });
+
 if (data.value?.url) {
-  useExternalRedirect(data.value?.url, "302");
+  useExternalRedirect(data.value.url, data.value.id, 302);
 }
 </script>
 
