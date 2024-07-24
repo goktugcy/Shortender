@@ -17,7 +17,7 @@ export interface Database {
           deleted_at: Date | null;
           id: string;
           ip: string | null;
-          link_id: number;
+          link_id: string;
           user_agent: string | null;
         };
         Insert: {
@@ -27,7 +27,7 @@ export interface Database {
           deleted_at: Date | null;
           id?: string;
           ip?: string | null;
-          link_id: number;
+          link_id: string;
           user_agent?: string | null;
         };
         Update: {
@@ -37,7 +37,7 @@ export interface Database {
           deleted_at: Date | null;
           id?: string;
           ip?: string | null;
-          link_id?: number;
+          link_id?: string;
           user_agent?: string | null;
         };
         Relationships: [

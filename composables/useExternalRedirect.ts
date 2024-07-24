@@ -3,7 +3,7 @@ import { type Database } from "~/types/supabase";
 
 export default async function useExternalRedirect(
   url: string,
-  linkId: number,
+  linkId: string,
   code: number = 302
 ): Promise<void> {
   const validUrlRegex = /^(https?:\/\/)/;
