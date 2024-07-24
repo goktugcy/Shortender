@@ -13,8 +13,7 @@ export interface Database {
         Row: {
           city: string | null;
           country: string | null;
-          created_at: string | null;
-          deleted_at: Date | null;
+          created_at?: Date | null;
           id: string;
           ip: string | null;
           link_id: string;
@@ -23,8 +22,7 @@ export interface Database {
         Insert: {
           city?: string | null;
           country?: string | null;
-          created_at?: string | null;
-          deleted_at: Date | null;
+          created_at?: Date | null;
           id?: string;
           ip?: string | null;
           link_id: string;
@@ -33,8 +31,7 @@ export interface Database {
         Update: {
           city?: string | null;
           country?: string | null;
-          created_at?: string | null;
-          deleted_at: Date | null;
+          created_at?: Date | null;
           id?: string;
           ip?: string | null;
           link_id?: string;

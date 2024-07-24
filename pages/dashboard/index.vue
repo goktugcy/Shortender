@@ -33,30 +33,17 @@
       <LinkItem />
     </section>
 
-    <div
-      class="max-w-[1200px] px-6 w-full absolute top-14 right-1/2 -translate-x-1/3"
-    >
-      <TransitionGroup
-        :duration="{ enter: 600, leave: 600 }"
-        name="notification"
-      >
-        <div
-          v-for="notification in notifications"
-          :key="notification.id"
-          class="card text-sm w-fit ml-auto mt-5"
-        >
-          {{ notification.message }}
-        </div>
-      </TransitionGroup>
-    </div>
+    <NotificationManager />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { type Database } from "~/types/supabase";
+import { useNotification } from "~/composables/useNotification";
 
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
+const { addNotification } = useNotification();
 
 definePageMeta({
   middleware: ["auth"],
@@ -77,18 +64,6 @@ const form = ref({
   url: "",
   key: "",
 });
-
-const notifications = ref<{ id: number; message: string }[]>([]);
-
-function addNotification(message: string) {
-  const id = notifications.value.length + 1;
-  notifications.value = [{ id, message }, ...notifications.value];
-  setTimeout(() => {
-    notifications.value = notifications.value.filter(
-      (n: { id: number }) => n.id !== id
-    );
-  }, 3000);
-}
 
 const handleForm = async () => {
   if (!form.value.key) {
@@ -121,4 +96,3 @@ onMounted(() => {
   createShortKey();
 });
 </script>
-

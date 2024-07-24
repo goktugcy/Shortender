@@ -28,7 +28,7 @@ const { data } = await useAsyncData("links", async () => {
   return data;
 });
 if (data.value?.url) {
-  useExternalRedirect(data.value?.url, 301);
+  useExternalRedirect(data.value?.url, "302");
 }
 </script>
 

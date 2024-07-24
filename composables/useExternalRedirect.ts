@@ -23,36 +23,27 @@ export default async function useExternalRedirect(
       | string
       | null;
 
-    // Dynamically import geoip-lite only on the server side
     try {
       const geoip = await import("geoip-lite").then(
         (mod) => mod.default || mod
       );
 
-      // Geolocation data
       const geo = geoip.lookup(ip || "");
       const city = geo?.city || null;
       const country = geo?.country || null;
 
       const client = useSupabaseClient<Database>();
 
-      // Insert data into the clicks table
-      const { error } = await client.from("clicks").insert({
-        city,
-        country,
-        ip,
-        user_agent: userAgent,
-        link_id: linkId,
-        deleted_at: null,
-      });
-
-      if (error) {
-        console.error("Error inserting click data:", error);
-        throw new Error("Failed to insert click data");
-      }
-
       // Perform the redirect
       return nuxtApp.callHook("app:redirected").then(() => {
+        client.from("clicks").insert({
+          city: city,
+          country: country,
+          ip: ip,
+          user_agent: userAgent,
+          link_id: linkId,
+        });
+
         return sendRedirect(event, url, code);
       });
     } catch (err) {
@@ -60,7 +51,6 @@ export default async function useExternalRedirect(
       throw new Error("Server error during redirection process");
     }
   } else if (process.client) {
-    // Client-side redirect
     window.location.href = url;
   }
 }

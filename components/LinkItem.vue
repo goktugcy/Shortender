@@ -78,23 +78,13 @@
       </button>
     </div>
   </div>
-  <div
-    class="max-w-[1200px] px-6 w-full absolute top-14 left-1/2 -translate-x-1/3"
-  >
-    <TransitionGroup :duration="{ enter: 600, leave: 600 }" name="notification">
-      <div
-        v-for="notification in notifications"
-        :key="notification.id"
-        class="card text-sm w-fit ml-auto mt-5"
-      >
-        {{ notification.message }}
-      </div>
-    </TransitionGroup>
-  </div>
+  <NotificationManager />
 </template>
 
 <script setup lang="ts">
 import { type Database } from "~/types/supabase";
+
+import { useNotification } from "~/composables/useNotification";
 
 interface Link {
   id: string;
@@ -104,6 +94,7 @@ interface Link {
 
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
+const { addNotification } = useNotification();
 
 definePageMeta({
   middleware: ["auth"],
@@ -141,18 +132,6 @@ onMounted(() => {
 });
 
 watch(() => user.value?.id, fetchLinks, { immediate: true });
-
-const notifications = ref<{ id: number; message: string }[]>([]);
-
-function addNotification(message: string) {
-  const id = notifications.value.length + 1;
-  notifications.value = [{ id, message }, ...notifications.value];
-  setTimeout(() => {
-    notifications.value = notifications.value.filter(
-      (n: { id: number }) => n.id !== id
-    );
-  }, 3000);
-}
 
 const config = useRuntimeConfig();
 
