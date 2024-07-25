@@ -37,11 +37,16 @@ export default async function useExternalRedirect(
         city: city as string,
       });
 
+      const clicks = await client
+        .from("links")
+        .select("clicks")
+        .eq("id", linkId);
+      
+      const clicksCount = clicks.data?.[0]?.clicks ?? 0;
+      
       await client
         .from("links")
-        .update({
-          clicks: +1,
-        })
+        .update({ clicks: clicksCount + 1 })
         .eq("id", linkId);
 
       // Perform the redirect
