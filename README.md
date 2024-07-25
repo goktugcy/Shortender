@@ -1,6 +1,7 @@
 # Shortender
 
 Shortender is a Nuxt.js project designed to provide URL shortening services. This README provides an overview of the project structure, installation instructions, and usage guidelines.
+![Görsel Açıklaması](https://ktiuprnnoyajjicmyysg.supabase.co/storage/v1/object/sign/image/Ekran%20Resmi%202024-07-25%2016.59.23.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJpbWFnZS9Fa3JhbiBSZXNtaSAyMDI0LTA3LTI1IDE2LjU5LjIzLnBuZyIsImlhdCI6MTcyMTkxNjk3MiwiZXhwIjo0NTYwMTU2OTcyfQ.CU0cRTTn2EgBCVYQMeWBEkRRsL8amCWaF0ekzPLIjAk&t=2024-07-25T14%3A16%3A12.968Z)
 
 ## Project Structure
 
