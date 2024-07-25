@@ -12,43 +12,43 @@ body::before {
   content: "";
   position: fixed;
   z-index: -1;
-  background: radial-gradient(75.61% 75.61% at 50% 24.39%,
-      rgba(9, 180, 57, 0.2) 0%,
-      rgba(9, 180, 139, 0) 100%);
+  background: radial-gradient(75.61% 75.61% at 50% 24.39%, rgba(9, 180, 180, 0.2) 30%, rgba(9, 180, 139, 0) 100%);
+  animation: gradientAnimation 15s ease-in-out infinite;
 }
+
+
 
 .container {
   @apply max-w-5xl mx-auto px-5;
 }
 
 .bg-blur {
-  @apply bg-black/30 backdrop-blur-md;
+  @apply bg-black/30 backdrop-blur-md rounded-lg;
 }
 
 .btn {
-  @apply bg-green-600 hover:bg-green-500 duration-300;
+  @apply bg-green-600 hover:bg-green-500 duration-300 py-2 px-4 rounded-lg shadow-md text-white font-semibold;
 }
 
 .heading {
-  background: linear-gradient(180deg,
-      #ffffff 0%,
-      rgba(255, 255, 255, 0) 188.28%);
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0) 188.28%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
+  @apply text-4xl font-bold mb-4;
 }
 
 .card {
-  @apply min-w-[360px] bg-white/5 rounded-xl shadow-lg p-5 border border-white/10;
+  @apply min-w-[360px] bg-white/5 rounded-xl shadow-lg p-5 border border-white/10 transition-transform transform hover:scale-105;
 }
 
 input {
-  @apply bg-transparent border border-white/20 focus:outline-0;
+  @apply bg-transparent border border-white/20 focus:outline-0 focus:ring-2 focus:ring-green-500 rounded-md p-2;
 }
 
 form label {
-  @apply text-white/70 text-sm;
+  @apply text-white/70 text-sm font-medium;
 }
 
 .form-group {
@@ -57,12 +57,12 @@ form label {
 
 .hover-effect {
   @apply hover:text-white/70;
-  transition: 0.2s ease-in-out;
+  transition: 0.4s ease-in-out;
 }
 
 .notification-enter-active,
 .notification-leave-active {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .notification-leave-active {
@@ -73,4 +73,22 @@ form label {
 .notification-leave-to {
   transform: translateY(-50px);
   opacity: 0;
+}
+
+/* Ek animasyonlar ve efektler */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.card {
+  animation: float 6s ease-in-out infinite;
+}
+
+.btn:hover {
+  @apply shadow-lg transform scale-105;
 }

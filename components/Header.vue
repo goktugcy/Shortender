@@ -2,7 +2,7 @@
   <div class="fixed top-0 left-0 right-0 border-b border-white/20 bg-blur z-50">
     <nav class="container py-4 flex justify-between items-center">
       <NuxtLink class="text-2xl font-bold hover-effect" :to="{ name: 'index' }"
-        >ShortLink
+        >Shortender
       </NuxtLink>
 
       <ul class="flex gap-5">
