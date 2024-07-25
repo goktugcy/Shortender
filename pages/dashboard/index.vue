@@ -69,6 +69,11 @@ const handleForm = async () => {
       user_id: user.value?.id,
     });
 
+    if (error && error.message.includes("duplicate key value")) {
+      addNotification("👎 Error: key already exists");
+      return;
+    }
+
     if (error) console.error(error);
     addNotification("👍 Short link created!");
     createShortKey();
