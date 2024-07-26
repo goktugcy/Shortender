@@ -93,11 +93,11 @@
 </template>
 
 <script lang="ts" setup>
-definePageMeta({
-  middleware: ["auth"],
-});
+// definePageMeta({
+//   middleware: ["auth"],
+// });
 
-const supabaseAuth = useSupabaseAuthClient();
+const supabaseAuth = useSupabaseClient();
 
 let isShowNotification = ref<boolean>(false);
 let errorMessage = ref<string>("");

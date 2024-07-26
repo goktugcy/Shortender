@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-const supabaseAuth = useSupabaseAuthClient();
+const supabaseAuth = useSupabaseClient();
 const user = useSupabaseUser();
 const getName = () => user.value?.user_metadata.name ?? user.value?.email;
 const route = useRoute();

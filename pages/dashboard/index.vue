@@ -45,9 +45,9 @@ const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 const { addNotification } = useNotification();
 
-definePageMeta({
-  middleware: ["auth"],
-});
+// definePageMeta({
+//   middleware: ["auth"],
+// });
 
 //--Form--//
 const form = ref({

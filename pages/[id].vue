@@ -33,5 +33,3 @@ if (data.value?.url) {
   useExternalRedirect(data.value.url, data.value.id, 302);
 }
 </script>
-
-<style scoped></style>
