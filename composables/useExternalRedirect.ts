@@ -28,7 +28,8 @@ export default async function useExternalRedirect(
     const client = useSupabaseClient<Database>();
 
     try {
-      client.from("clicks").insert({
+      // Insert click data
+      await client.from("clicks").insert({
         ip: ip,
         user_agent: userAgent,
         link_id: linkId,
@@ -36,18 +37,28 @@ export default async function useExternalRedirect(
         city: city as string,
       });
 
-      const clicks = await client
+      // Fetch current clicks count
+      const { data: clicksData, error: clicksError } = await client
         .from("links")
         .select("clicks")
-        .eq("id", linkId);
+        .eq("id", linkId)
+        .single();
 
-      const clicksCount =
-        clicks.data && clicks.data[0] ? clicks.data[0].clicks : 0;
+      if (clicksError) {
+        throw new Error("Failed to fetch clicks count");
+      }
 
-      client
+      const clicksCount = clicksData ? clicksData.clicks : 0;
+
+      // Update clicks count
+      const { error: updateError } = await client
         .from("links")
         .update({ clicks: clicksCount + 1 })
         .eq("id", linkId);
+
+      if (updateError) {
+        throw new Error("Failed to update clicks count");
+      }
 
       // Perform the redirect
       await nuxtApp.callHook("app:redirected");
