@@ -26,14 +26,12 @@ export default async function useExternalRedirect(
     const client = useSupabaseClient<Database>();
 
     try {
-      // IP üzerinden konum bilgisini al
       const locationResponse = await fetch(`http://ip-api.com/json/${ip}`);
       const locationData = await locationResponse.json();
 
       const country = locationData.country || null;
       const city = locationData.city || null;
 
-      // Insert click data
       const { error: insertError } = await client.from("clicks").insert({
         ip: ip,
         user_agent: userAgent,
@@ -46,7 +44,6 @@ export default async function useExternalRedirect(
         throw new Error("Failed to insert click data");
       }
 
-      // Fetch current clicks count
       const { data: clicksData, error: clicksError } = await client
         .from("links")
         .select("clicks")
@@ -59,7 +56,6 @@ export default async function useExternalRedirect(
 
       const clicksCount = clicksData ? clicksData.clicks : 0;
 
-      // Update clicks count
       const { error: updateError } = await client
         .from("links")
         .update({ clicks: clicksCount + 1 })
@@ -69,7 +65,6 @@ export default async function useExternalRedirect(
         throw new Error("Failed to update clicks count");
       }
 
-      // Perform the redirect
       await nuxtApp.callHook("app:redirected");
       return sendRedirect(event, url, code);
     } catch (err) {
