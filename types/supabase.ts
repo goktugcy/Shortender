@@ -48,7 +48,7 @@ export interface Database {
       };
       links: {
         Row: {
-          clicks: number | null;
+          clicks: number;
           created_at: string | null;
           id: string;
           key: string;

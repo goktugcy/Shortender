@@ -28,8 +28,7 @@ export default async function useExternalRedirect(
     const client = useSupabaseClient<Database>();
 
     try {
-      // Insert click data into Supabase
-      await client.from("clicks").insert({
+      client.from("clicks").insert({
         ip: ip,
         user_agent: userAgent,
         link_id: linkId,
@@ -41,10 +40,11 @@ export default async function useExternalRedirect(
         .from("links")
         .select("clicks")
         .eq("id", linkId);
-      
-      const clicksCount = clicks.data?.[0]?.clicks ?? 0;
-      
-      await client
+
+      const clicksCount =
+        clicks.data && clicks.data[0] ? clicks.data[0].clicks : 0;
+
+      client
         .from("links")
         .update({ clicks: clicksCount + 1 })
         .eq("id", linkId);

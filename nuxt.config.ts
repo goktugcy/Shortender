@@ -14,6 +14,6 @@ export default defineNuxtConfig({
       cookieRedirect: true,
     },
   },
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
+  modules: ["@nuxt/ui", "@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
   compatibilityDate: "2024-07-22",
 });
