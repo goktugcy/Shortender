@@ -29,13 +29,17 @@ export default async function useExternalRedirect(
 
     try {
       // Insert click data
-      await client.from("clicks").insert({
+      const { error: insertError } = await client.from("clicks").insert({
         ip: ip,
         user_agent: userAgent,
         link_id: linkId,
         country: country as string,
         city: city as string,
       });
+
+      if (insertError) {
+        throw new Error("Failed to insert click data");
+      }
 
       // Fetch current clicks count
       const { data: clicksData, error: clicksError } = await client
