@@ -22,19 +22,24 @@ export default async function useExternalRedirect(
     const ip = (headers["x-real-ip"] || headers["x-forwarded-for"]) as
       | string
       | null;
-    const country = headers["cf-ipcountry"] || null;
-    const city = headers["cf-ipcity"] || null;
 
     const client = useSupabaseClient<Database>();
 
     try {
+      // IP üzerinden konum bilgisini al
+      const locationResponse = await fetch(`http://ip-api.com/json/${ip}`);
+      const locationData = await locationResponse.json();
+
+      const country = locationData.country || null;
+      const city = locationData.city || null;
+
       // Insert click data
       const { error: insertError } = await client.from("clicks").insert({
         ip: ip,
         user_agent: userAgent,
         link_id: linkId,
-        country: country as string,
-        city: city as string,
+        country: country,
+        city: city,
       });
 
       if (insertError) {
