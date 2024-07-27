@@ -5,6 +5,7 @@ export default defineNuxtConfig({
       appUrl: process.env.APP_URL,
     },
   },
+
   supabase: {
     redirectOptions: {
       login: "/auth",
@@ -14,6 +15,13 @@ export default defineNuxtConfig({
       cookieRedirect: true,
     },
   },
+
   modules: ["@nuxt/ui", "@nuxtjs/tailwindcss", "@nuxtjs/supabase"],
   compatibilityDate: "2024-07-22",
+
+  devtools: {
+    timeline: {
+      enabled: true,
+    },
+  },
 });
