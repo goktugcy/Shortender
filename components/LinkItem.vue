@@ -71,8 +71,6 @@ interface Link {
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
 
-console.log("User:", user.value);
-
 const links = ref<Link[]>([]);
 
 const fetchLinks = async () => {
@@ -102,7 +100,6 @@ onMounted(() => {
       "postgres_changes",
       { event: "*", schema: "public", table: "links" },
       (payload: any) => {
-        console.log("Change received!", payload);
         fetchLinks();
       }
     )
@@ -152,9 +149,3 @@ const deleteLink = async (id: string) => {
   }
 };
 </script>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-}
-</style>
