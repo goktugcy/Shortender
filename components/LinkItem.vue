@@ -264,25 +264,30 @@ const nextPage = () => {
 
 onMounted(() => {
   fetchLinks();
-  const channel = client.channel("custom-all-channel");
 
-  channel.on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "links" },
-    (payload: Json) => {
-      fetchLinks();
-    }
-  );
+  client
+    .channel("link-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "links" },
+      (payload: any) => {
+        fetchLinks();
+      }
+    )
+    .subscribe();
 
-  channel.on(
-    "postgres_changes",
-    { event: "*", schema: "public", table: "clicks" },
-    (payload: Json) => {
-      fetchClicks(selectedLinkId.value || "");
-    }
-  );
-
-  channel.subscribe();
+  client
+    .channel("click-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "clicks" },
+      (payload: any) => {
+        if (isOpen.value && selectedLinkId.value) {
+          fetchClicks(selectedLinkId.value);
+        }
+      }
+    )
+    .subscribe();
 });
 
 watch(() => user.value?.id, fetchLinks, { immediate: true });
