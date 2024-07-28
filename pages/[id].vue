@@ -17,7 +17,7 @@ if (!route.params.id) {
   throw showError({
     status: 404,
     statusText: "Invalid URL",
-    statusMessage: "The URL is invalid.",
+    statusMessage: "This URL is invalid.",
   });
 }
 
@@ -47,8 +47,16 @@ if (data.value?.url) {
     throw showError({
       status: 404,
       statusText: "Invalid URL",
-      statusMessage: "The URL is invalid.",
+      statusMessage: "This URL is invalid.",
     });
   }
+}
+
+if (data.value?.status === false) {
+  throw showError({
+    status: 404,
+    statusText: "Disabled URL",
+    statusMessage: "This URL is disabled.",
+  });
 }
 </script>

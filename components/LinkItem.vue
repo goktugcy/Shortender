@@ -16,6 +16,11 @@
           <th
             class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
           >
+            Status
+          </th>
+          <th
+            class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
+          >
             Actions
           </th>
         </tr>
@@ -29,6 +34,19 @@
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
             {{ link.url }}
+          </td>
+
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+            <div>
+              <UToggle
+                on-icon="i-heroicons-check-20-solid"
+                off-icon="i-heroicons-x-mark-20-solid"
+                :model-value="link.status"
+                @update:model-value="
+                  (newStatus) => updateStatus(link.id, newStatus)
+                "
+              />
+            </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <button
@@ -61,11 +79,11 @@
 
 <script setup lang="ts">
 import type { Database } from "~/types/supabase";
-
 interface Link {
   id: string;
   key: string;
   url: string;
+  status: boolean;
 }
 
 const client = useSupabaseClient<Database>();
@@ -77,15 +95,22 @@ const fetchLinks = async () => {
   const { data, error } = await client
     .from("links")
     .select("*")
-    .eq("user_id", user.value?.id);
+    .eq("user_id", user.value?.id)
+    .order("created_at", { ascending: false });
   if (error) {
     console.error("Error fetching links:", error);
   } else {
     links.value = data.map(
-      (link: { id: string; key: string; url: string | null }) => ({
+      (link: {
+        id: string;
+        key: string;
+        url: string | null;
+        status: boolean;
+      }) => ({
         id: link.id,
         key: link.key,
         url: link.url!,
+        status: link.status,
       })
     );
   }
@@ -146,6 +171,21 @@ const deleteLink = async (id: string) => {
   } catch (error) {
     console.error(`Error deleting link with ID ${id}:`, error);
     addNotification("Failed to delete link ❌");
+  }
+};
+
+const updateStatus = async (id: string, newValue: boolean) => {
+  try {
+    const { error } = await client
+      .from("links")
+      .update({ status: newValue })
+      .eq("id", id)
+      .single();
+    if (error) throw error;
+    addNotification("Status updated ✅");
+  } catch (error) {
+    console.error(`Error updating status for link with ID ${id}:`, error);
+    addNotification("Failed to update status ❌");
   }
 };
 </script>
