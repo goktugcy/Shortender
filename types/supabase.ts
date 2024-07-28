@@ -13,6 +13,7 @@ export interface Database {
         Row: {
           city: string | null;
           country: string | null;
+          isp?: string | null;
           created_at?: Date | null;
           id: string;
           ip: string | null;
@@ -22,6 +23,7 @@ export interface Database {
         Insert: {
           city?: string | null;
           country?: string | null;
+          isp?: string | null;
           created_at?: Date | null;
           id?: string;
           ip?: string | null;
@@ -31,6 +33,7 @@ export interface Database {
         Update: {
           city?: string | null;
           country?: string | null;
+          isp?: string | null;
           created_at?: Date | null;
           id?: string;
           ip?: string | null;

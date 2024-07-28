@@ -137,6 +137,11 @@
                 <th
                   class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
                 >
+                  isp
+                </th>
+                <th
+                  class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
+                >
                   user_agent
                 </th>
                 <th
@@ -165,6 +170,9 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {{ click.country }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  {{ click.isp }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {{ click.user_agent }}

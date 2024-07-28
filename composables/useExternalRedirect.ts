@@ -31,6 +31,7 @@ export default async function useExternalRedirect(
 
       const country = locationData.country || null;
       const city = locationData.city || null;
+      const isp = locationData.isp || null;
 
       const { error: insertError } = await client.from("clicks").insert({
         ip: ip,
@@ -38,6 +39,7 @@ export default async function useExternalRedirect(
         link_id: linkId,
         country: country,
         city: city,
+        isp: isp,
       });
 
       if (insertError) {
