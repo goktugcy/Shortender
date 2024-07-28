@@ -168,7 +168,11 @@
                   {{ click.user_agent }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                  {{ click.created_at ? new Date(click.created_at).toLocaleString() : 'N/A' }}
+                  {{
+                    click.created_at
+                      ? new Date(click.created_at).toLocaleString()
+                      : "N/A"
+                  }}
                 </td>
               </tr>
             </tbody>
@@ -189,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Database } from "~/types/supabase";
+import type { Database, Json } from "~/types/supabase";
 
 const client = useSupabaseClient<Database>();
 const user = useSupabaseUser();
@@ -202,7 +206,6 @@ const currentPage = ref(1);
 const pageSize = 20;
 const totalPages = ref(0);
 
-// Fetch links
 const fetchLinks = async () => {
   const { data, error } = await client
     .from("links")
@@ -217,12 +220,12 @@ const fetchLinks = async () => {
   }
 };
 
-// Fetch clicks
 const fetchClicks = async (linkId: string) => {
-  const { data, error } = await client
+  const { data, error, count } = await client
     .from("clicks")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("link_id", linkId)
+    .order("created_at", { ascending: false })
     .range(
       (currentPage.value - 1) * pageSize,
       currentPage.value * pageSize - 1
@@ -232,7 +235,7 @@ const fetchClicks = async (linkId: string) => {
     console.error("Error fetching clicks:", error);
   } else {
     clicks.value = data || [];
-    totalPages.value = Math.ceil(data.length / pageSize);
+    totalPages.value = Math.ceil((count || 0) / pageSize);
   }
 };
 
@@ -248,43 +251,38 @@ const openClicksModal = (linkId: string) => {
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    fetchClicks(selectedLinkId.value!);
+    selectedLinkId.value && fetchClicks(selectedLinkId.value);
   }
 };
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    fetchClicks(selectedLinkId.value!);
+    selectedLinkId.value && fetchClicks(selectedLinkId.value);
   }
 };
 
 onMounted(() => {
   fetchLinks();
+  const channel = client.channel("custom-all-channel");
 
-  client
-    .channel("link-channel")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "links" },
-      (payload: any) => {
-        fetchLinks();
-      }
-    )
-    .subscribe();
+  channel.on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "links" },
+    (payload: Json) => {
+      fetchLinks();
+    }
+  );
 
-  client
-    .channel("click-channel")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "clicks" },
-      (payload: any) => {
-        if (isOpen.value && selectedLinkId.value) {
-          fetchClicks(selectedLinkId.value);
-        }
-      }
-    )
-    .subscribe();
+  channel.on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "clicks" },
+    (payload: Json) => {
+      fetchClicks(selectedLinkId.value || "");
+    }
+  );
+
+  channel.subscribe();
 });
 
 watch(() => user.value?.id, fetchLinks, { immediate: true });
