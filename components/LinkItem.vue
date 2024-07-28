@@ -375,7 +375,7 @@ const updateStatus = async (id: string, newValue: boolean) => {
   try {
     const { error } = await client
       .from("links")
-      .update({ status: newValue })
+      .update({ status: newValue, updated_at: new Date() })
       .eq("id", id)
       .single();
     if (error) throw error;

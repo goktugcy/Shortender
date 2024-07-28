@@ -60,7 +60,7 @@ export default async function useExternalRedirect(
 
       const { error: updateError } = await client
         .from("links")
-        .update({ clicks: (clicksCount ?? 0) + 1, updated_at: new Date() })
+        .update({ clicks: (clicksCount ?? 0) + 1 })
         .eq("id", linkId);
 
       if (updateError) {
