@@ -11,34 +11,34 @@ export interface Database {
     Tables: {
       clicks: {
         Row: {
+          id?: string;
+          link_id: string;
+          ip: string | null;
           city: string | null;
           country: string | null;
           isp?: string | null;
-          created_at?: Date | null;
-          id: string;
-          ip: string | null;
-          link_id: string;
           user_agent: string | null;
+          created_at?: Date | null;
         };
         Insert: {
-          city?: string | null;
-          country?: string | null;
-          isp?: string | null;
-          created_at?: Date | null;
           id?: string;
-          ip?: string | null;
           link_id: string;
-          user_agent?: string | null;
+          ip: string | null;
+          city: string | null;
+          country: string | null;
+          isp?: string | null;
+          user_agent: string | null;
+          created_at?: Date | null;
         };
         Update: {
-          city?: string | null;
-          country?: string | null;
-          isp?: string | null;
-          created_at?: Date | null;
           id?: string;
-          ip?: string | null;
-          link_id?: string;
-          user_agent?: string | null;
+          link_id: string;
+          ip: string | null;
+          city: string | null;
+          country: string | null;
+          isp?: string | null;
+          user_agent: string | null;
+          created_at?: Date | null;
         };
         Relationships: [
           {
@@ -51,31 +51,34 @@ export interface Database {
       };
       links: {
         Row: {
-          clicks: number;
-          created_at: string | null;
-          id: string;
-          key: string;
-          url: string | null;
-          user_id: string | null;
-          status: boolean | true;
-        };
-        Insert: {
-          clicks?: number | null;
-          created_at?: string | null;
           id?: string;
-          key: string;
-          url?: string | null;
           user_id?: string | null;
-          status: boolean | true;
-        };
-        Update: {
-          clicks?: number | null;
-          created_at?: string | null;
-          id?: string;
           key?: string;
           url?: string | null;
-          user_id?: string | null;
           status?: boolean | true;
+          clicks?: number | null;
+          created_at?: Date | null;
+          updated_at?: Date | null;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          key?: string;
+          url?: string | null;
+          status?: boolean | true;
+          clicks?: number | null;
+          created_at?: Date | null;
+          updated_at?: Date | null;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          key?: string;
+          url?: string | null;
+          status?: boolean | true;
+          clicks?: number | null;
+          created_at?: Date | null;
+          updated_at?: Date | null;
         };
         Relationships: [
           {

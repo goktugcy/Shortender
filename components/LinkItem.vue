@@ -21,6 +21,22 @@
           <th
             class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
           >
+            Clicks
+          </th>
+
+          <th
+            class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
+          >
+            Created At
+          </th>
+          <th
+            class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
+          >
+            Updated At
+          </th>
+          <th
+            class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
+          >
             Actions
           </th>
         </tr>
@@ -42,26 +58,48 @@
                 off-icon="i-heroicons-x-mark-20-solid"
                 :model-value="link.status"
                 @update:model-value="
-                  (newStatus) => updateStatus(link.id, newStatus)
+                  (newStatus) => updateStatus(link.id ?? '', newStatus)
                 "
               />
             </div>
           </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+            {{ link.clicks }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <!--Created at updated at -->
+            <div>
+              {{
+                link.created_at
+                  ? new Date(link.created_at).toLocaleString()
+                  : "N/A"
+              }}
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div>
+              {{
+                link.updated_at
+                  ? new Date(link.updated_at).toLocaleString()
+                  : "N/A"
+              }}
+            </div>
+          </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <button
-              @click="copyLink(link.key)"
+              @click="link.key && copyLink(link.key)"
               class="text-green-400 hover:text-green-300 mr-4"
             >
               Copy
             </button>
             <button
-              @click="() => openClicksModal(link.id)"
+              @click="() => openClicksModal(link.id ?? '')"
               class="text-blue-400 hover:text-blue-300 mr-4"
             >
               View Clicks
             </button>
             <button
-              @click="deleteLink(link.id)"
+              @click="deleteLink(link.id ?? '')"
               class="text-red-400 hover:text-red-300"
             >
               Delete

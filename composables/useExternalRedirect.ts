@@ -35,10 +35,10 @@ export default async function useExternalRedirect(
 
       const { error: insertError } = await client.from("clicks").insert({
         ip: ip,
-        user_agent: userAgent,
         link_id: linkId,
-        country: country,
         city: city,
+        country: country,
+        user_agent: userAgent,
         isp: isp,
       });
 
@@ -60,7 +60,7 @@ export default async function useExternalRedirect(
 
       const { error: updateError } = await client
         .from("links")
-        .update({ clicks: clicksCount + 1 })
+        .update({ clicks: (clicksCount ?? 0) + 1, updated_at: new Date() })
         .eq("id", linkId);
 
       if (updateError) {
