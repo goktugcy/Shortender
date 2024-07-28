@@ -55,6 +55,15 @@ const form = ref({
   key: "",
 });
 
+const validUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
+
 const handleForm = async () => {
   if (!form.value.key) {
     createShortKey();
@@ -63,6 +72,12 @@ const handleForm = async () => {
     addNotification("👎 Error: fill url first");
     return;
   }
+
+  if (!validUrl(form.value.url)) {
+    addNotification("👎 Error: invalid url");
+    return;
+  }
+
   try {
     const { data, error } = await client.from("links").insert({
       ...form.value,
