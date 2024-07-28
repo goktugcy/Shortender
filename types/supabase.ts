@@ -54,7 +54,7 @@ export interface Database {
           key: string;
           url: string | null;
           user_id: string | null;
-          status: boolean;
+          status: boolean | true;
         };
         Insert: {
           clicks?: number | null;
@@ -63,7 +63,7 @@ export interface Database {
           key: string;
           url?: string | null;
           user_id?: string | null;
-          status: boolean;
+          status: boolean | true;
         };
         Update: {
           clicks?: number | null;
@@ -72,7 +72,7 @@ export interface Database {
           key?: string;
           url?: string | null;
           user_id?: string | null;
-          status?: boolean;
+          status?: boolean | true;
         };
         Relationships: [
           {

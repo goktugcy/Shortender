@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="container pt-14 mb-10 w-1/2 ">
+    <section class="container pt-14 mb-10 w-1/2">
       <div class="card mt-10">
         <form @submit.prevent="handleForm">
           <div class="flex justify-between gap-5">
@@ -20,7 +20,7 @@
             />
             <button
               type="submit"
-               class="gradient-border text-md sm:text-xl py-2 px-4 sm:py-3 sm:px-6 cursor-pointer"
+              class="gradient-border text-md sm:text-xl py-2 px-4 sm:py-3 sm:px-6 cursor-pointer"
             >
               Short now!
             </button>
@@ -82,7 +82,7 @@ const handleForm = async () => {
     const { data, error } = await client.from("links").insert({
       ...form.value,
       user_id: user.value?.id,
-    });
+    } as Database["public"]["Tables"]["links"]["Row"]);
 
     if (error && error.message.includes("duplicate key value")) {
       addNotification("👎 Error: key already exists");
