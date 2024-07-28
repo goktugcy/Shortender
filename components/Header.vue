@@ -29,7 +29,7 @@
           </button>
         </li>
         <li v-else>
-          <NuxtLink class="py-2 px-3 btn rounded-full" :to="{ name: 'auth' }"
+          <NuxtLink class="py-2 px-3 btn rounded-full gradient-border text-md sm:text-xl  sm:py-3 sm:px-6 cursor-pointer" :to="{ name: 'auth' }"
             >Sign in
           </NuxtLink>
         </li>

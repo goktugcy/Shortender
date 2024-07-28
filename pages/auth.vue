@@ -20,7 +20,7 @@
           </svg>
         </div>
         <button
-          class="py-2 text-2xl w-full px-6 rounded-full mt-6 btn"
+          class="py-2 text-2xl w-full px-6 rounded-full mt-6 gradient-border text-md sm:text-xl sm:py-3 sm:px-6 cursor-pointer "
           @click="loginWithGitHub"
         >
           Continue with GitHub
@@ -53,7 +53,7 @@
           </div>
           <button
             type="submit"
-            class="py-2 capitalize rounded-full mt-5 text-2xl px-6 w-full btn"
+            class="py-2 capitalize rounded-full mt-5 text-2xl px-6 w-full gradient-border text-md sm:text-xl sm:py-3 sm:px-6 cursor-pointer"
           >
             {{ authMethodLogin ? "sign in" : "register" }}
           </button>
