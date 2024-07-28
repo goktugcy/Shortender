@@ -117,11 +117,6 @@
                 <th
                   class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
                 >
-                  ID
-                </th>
-                <th
-                  class="px-6 py-3 border-b-2 border-gray-700 bg-gray-900 text-left text-xs font-semibold text-gray-300 uppercase tracking-wider"
-                >
                   ip
                 </th>
                 <th
@@ -157,11 +152,6 @@
                 :key="click.id"
                 class="hover:bg-gray-700"
               >
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100"
-                >
-                  {{ click.id }}
-                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                   {{ click.ip }}
                 </td>
